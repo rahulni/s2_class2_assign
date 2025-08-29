@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Filter Demo — 3×3 Convolution</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="static/js/main.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Image Filter Demo — Custom 3×3 Convolution</h1>
+  </header>
+  <main>
+    <section class="panel">
+      <div class="body grid">
+        <h2>1) Choose Image</h2>
+        <div class="file">
+          <input id="file" type="file" accept="image/*">
+          <div class="btns">
+            <button class="secondary" id="btnSample">Load Sample</button>
+            <button class="secondary" id="btnReset">Reset</button>
+          </div>
+          <span class="small">Tip: upload a photo or use the sample to test kernels like sharpen/edge detect.</span>
+        </div>
+        <div class="sp"></div>
+        <h2>2) Enter 3×3 Kernel</h2>
+        <div class="controls">
+          <div class="row">
+            <input type="number" step="0.1" value="0" id="k00">
+            <input type="number" step="0.1" value="-1" id="k01">
+            <input type="number" step="0.1" value="0" id="k02">
+          </div>
+          <div class="row">
+            <input type="number" step="0.1" value="-1" id="k10">
+            <input type="number" step="0.1" value="5" id="k11">
+            <input type="number" step="0.1" value="-1" id="k12">
+          </div>
+          <div class="row">
+            <input type="number" step="0.1" value="0" id="k20">
+            <input type="number" step="0.1" value="-1" id="k21">
+            <input type="number" step="0.1" value="0" id="k22">
+          </div>
+          <div class="inline">
+            <label class="inline"><input id="autoDivide" type="checkbox" checked> auto-divide by kernel sum (if nonzero)</label>
+          </div>
+          <div class="inline">
+            <label>Bias: <input id="bias" type="number" step="1" value="0" style="width:100px"></label>
+            <label>Iterations: <input id="iters" type="number" step="1" min="1" value="1" style="width:100px"></label>
+          </div>
+          <div class="inline">
+            <label class="inline"><input id="grayscale" type="checkbox"> convert to grayscale first</label>
+            <label class="inline"><input id="absval" type="checkbox"> take absolute value (useful for edges)</label>
+            <label class="inline"><input id="clamp" type="checkbox" checked> clamp to 0–255</label>
+          </div>
+          <div class="preset-badges" id="presets"></div>
+          <div class="btns">
+            <button class="primary" id="apply">Apply Filter</button>
+            <button class="secondary" id="identity">Identity</button>
+            <button class="secondary" id="clear">Clear Kernel</button>
+          </div>
+          <div class="stat" id="stat"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="body">
+        <h2>Preview</h2>
+        <div class="canvas-wrap">
+          <div class="canvas-card">
+            <h3>Source</h3>
+            <canvas id="src" width="512" height="512"></canvas>
+          </div>
+          <div class="canvas-card">
+            <h3>Result</h3>
+            <canvas id="dst" width="512" height="512"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-note">Made with vanilla JS on HTML5 canvas. All processing happens locally in your browser.</div>
+
+  <img id="hiddenImg" style="display:none" alt="hidden" />
+</body>
+</html>
