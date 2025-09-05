@@ -103,6 +103,54 @@
 
     $('apply').addEventListener('click', applyFilter);
 
+    // Explain Kernel using Gemini API (with debug logs and error handling)
+    async function explainKernel() {
+      console.log('explainKernel called');
+      const kernel = readKernel();
+      const explanationDiv = $('explanation');
+      explanationDiv.style.display = 'block';
+      explanationDiv.textContent = 'Requesting explanation...';
+      explanationDiv.style.background = '#0f172a';
+      explanationDiv.style.color = '#94a3b8';
+      try {
+        const url = window.location.origin + '/explain';
+        console.log('Posting to', url, 'payload', { kernel });
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ kernel,
+            bias: parseFloat($('bias').value || '0'),
+            iters: parseInt($('iters').value || '1'),
+            autoDivide: $('autoDivide').checked,
+            grayscale: $('grayscale').checked,
+            absval: $('absval').checked,
+            clamp: $('clamp').checked
+          })
+        });
+        console.log('Fetch returned', res.status);
+        const data = await res.json();
+        console.log('Response JSON', data);
+        if (data.explanation) {
+          explanationDiv.textContent = data.explanation;
+          explanationDiv.style.background = '#222c3a';
+          explanationDiv.style.color = '#22c55e';
+        } else {
+          explanationDiv.textContent = data.error || 'No explanation received.';
+          explanationDiv.style.background = '#ef4444';
+          explanationDiv.style.color = '#fff';
+        }
+      } catch (err) {
+        console.error('explainKernel error', err);
+        explanationDiv.textContent = 'Request failed: ' + (err.message || err);
+        explanationDiv.style.background = '#ef4444';
+        explanationDiv.style.color = '#fff';
+      }
+    }
+
+    const explainBtn = $('explain');
+    console.log('explain button element is', explainBtn);
+    if (explainBtn) explainBtn.addEventListener('click', explainKernel);
+
     function toGrayscale(data) {
       for (let i=0; i<data.length; i+=4) {
         const r=data[i], g=data[i+1], b=data[i+2];

@@ -54,10 +54,12 @@
             <label class="inline"><input id="clamp" type="checkbox" checked> clamp to 0–255</label>
           </div>
           <div class="preset-badges" id="presets"></div>
+          <!-- explanation moved to bottom full-width panel -->
           <div class="btns">
             <button class="primary" id="apply">Apply Filter</button>
             <button class="secondary" id="identity">Identity</button>
             <button class="secondary" id="clear">Clear Kernel</button>
+            <button class="primary" id="explain">Explain Result</button>
           </div>
           <div class="stat" id="stat"></div>
         </div>
@@ -77,6 +79,14 @@
             <canvas id="dst" width="512" height="512"></canvas>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Explanation at the bottom, full-width -->
+    <section class="panel fullwidth">
+      <div class="body">
+        <h2>Explanation</h2>
+        <div class="explain-content" id="explanation" style="display:none;"></div>
       </div>
     </section>
   </main>
